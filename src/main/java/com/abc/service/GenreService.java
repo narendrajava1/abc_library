@@ -18,7 +18,7 @@ public class GenreService {
    public  List<Genre> getAllGenres(){
       return genreRepository.getAllGenres();
     }
-    public  List<Genre> getGenreByGenreName(String generes){
+    public  List<Genre> getGenreByGenreName(List<String> generes){
         Query query=new Query();
         query.addCriteria(Criteria.where("genreName").in(generes));
       return genreRepository.getGenreByGenreName(query);

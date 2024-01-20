@@ -6,6 +6,7 @@ import com.abc.model.Genre;
 import com.abc.service.BookService;
 import com.abc.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ public class BookController {
     private GenreService genreService;
 
     @PostMapping(value = "save", consumes = "application/json")
+    @Transactional
     public ResponseEntity<Book> saveBook(@RequestBody Book book) {
         logger.info("Entering the save book {}",book);
         try {
@@ -64,6 +66,7 @@ public class BookController {
     }
 
     @PutMapping("update")
+    @Transactional
     public ResponseEntity<String> updateBook(@RequestBody  Book book){
         logger.info("Entering into the updateBook {}",book);
         return new ResponseEntity<>(bookService.updateBook(book),HttpStatus.OK);
@@ -73,8 +76,8 @@ public class BookController {
     public ResponseEntity<List<Book>> getBookByGenre(@RequestBody List<String> genresNames) {
         logger.info("Entering into the getAllGenres");
 
-        List<String> genreIdList = genreService.getGenreByGenreName(genresNames.get(0)).stream().map(Genre::getGenreID).collect(Collectors.toList());
-        List<Book> bookList = bookService.getBookByGenreId(genreIdList.get(0));
+        List<String> genreIdList = genreService.getGenreByGenreName(genresNames).stream().map(Genre::getGenreID).collect(Collectors.toList());
+        List<Book> bookList = bookService.getBookByGenreId(genreIdList);
         return new ResponseEntity<>(Optional.ofNullable(bookList)
                 .orElse(Collections.emptyList()), HttpStatus.OK);
     }

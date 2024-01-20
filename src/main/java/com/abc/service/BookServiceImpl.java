@@ -55,7 +55,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getBookByGenreId(String genreID) {
+    public List<Book> getBookByGenreId(List<String> genreIDList) {
 
 //        Query query=new Query();
 //        ObjectId oid = new ObjectId(genreID);
@@ -64,6 +64,6 @@ public class BookServiceImpl implements BookService {
 //
 //        query.addCriteria(criteria);
 
-        return mongoTemplate.find(new Query(Criteria.where("genre.$id").is(new ObjectId(genreID))),Book.class);
+        return mongoTemplate.find(new Query(Criteria.where("genre.$id").in(genreIDList.stream().map(ObjectId::new).collect(Collectors.toList()))),Book.class);
     }
 }

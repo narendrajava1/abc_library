@@ -25,7 +25,7 @@ public class GenreController {
     @PostMapping("by/genres")
     public ResponseEntity<List<Genre>> getGenreByGenreName(@RequestBody List<String> genres) {
         logger.info("Entering into the getBookByGenre {}",genres.toArray());
-        return new ResponseEntity<>(Optional.ofNullable(genreService.getGenreByGenreName(genres.get(0)))
+        return new ResponseEntity<>(Optional.ofNullable(genreService.getGenreByGenreName(genres))
                 .orElse(Collections.emptyList()), HttpStatus.OK);
     }
 

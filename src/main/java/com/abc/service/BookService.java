@@ -14,5 +14,5 @@ public interface BookService {
 
     String updateBook(Book book);
 
-    List<Book> getBookByGenreId(String genreID);
+    List<Book> getBookByGenreId(List<String> genreID);
 }
