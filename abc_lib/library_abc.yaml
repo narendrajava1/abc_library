@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: library-abc
+  labels:
+    app: library-abc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: library-abc
+  template:
+    metadata:
+      name: library-abc
+      labels:
+        app: library-abc
+    spec:
+      containers:
+        - name: library-abc
+          image: library-app
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9898
+          env:
+            - name: spring.data.mongodb.uri
+              value: mongodb://mongo-db-abc:27017/abc_db?retryWrites=false
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: library-abc
+spec:
+  selector:
+    app: library-abc
+  ports:
+    - port: 80
+      targetPort: 9898
+  type: LoadBalancer
+      

@@ -32,7 +32,6 @@ public class BookController {
     private GenreService genreService;
 
     @PostMapping(value = "save", consumes = "application/json")
-    @Transactional
     public ResponseEntity<Book> saveBook(@RequestBody Book book) {
         logger.info("Entering the save book {}",book);
         try {
@@ -66,7 +65,6 @@ public class BookController {
     }
 
     @PutMapping("update")
-    @Transactional
     public ResponseEntity<String> updateBook(@RequestBody  Book book){
         logger.info("Entering into the updateBook {}",book);
         return new ResponseEntity<>(bookService.updateBook(book),HttpStatus.OK);

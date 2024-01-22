@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-db-abc
+  labels:
+    app: mongo-db-abc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-db-abc
+  template:
+    metadata:
+      name: mongo-db-abc
+      labels:
+        app: mongo-db-abc
+    spec:
+      containers:
+        - name: mongo-db-abc
+          image: mongo
+          ports:
+            - containerPort: 27017
+#          command:
+#            - mongod --replSet rs0
+          volumeMounts:
+            - mountPath: /data/db
+              name: storage
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mongo-db-pvc
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-db-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-db-abc
+spec:
+  selector:
+    app: mongo-db-abc
+  ports:
+    - port: 27017
+      targetPort: 27017
+      
